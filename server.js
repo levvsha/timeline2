@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 const webpackConfig = require('./webpack/webpack.dev.config.js');
 
-const config = require('./config');
+const config = require('./dev-config');
 
 const compiler = webpack(webpackConfig);
 

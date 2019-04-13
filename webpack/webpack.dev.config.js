@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var config = require('../config');
+var config = require('../dev-config');
 console.log('config ==>', config);
 module.exports = {
   mode: 'development',

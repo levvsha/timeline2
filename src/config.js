@@ -1,39 +1,223 @@
+import * as d3 from 'd3';
+
 const defaultRadius = 10;
 const lastLevelRadius = 5;
 
+const margins = {
+  top: 30,
+  right: 140,
+  bottom: 30,
+  left: 30
+};
+
+const width = 4900 - margins.left - margins.right;
+const height = 900 - margins.top - margins.bottom;
+
+export const dimensions = {
+  width,
+  height,
+  margins
+};
+
+export const parseTime  = d3.timeParse("%d.%m.%Y");
+
+export const xScale = d3.scaleTime()
+  .range([0, width])
+  .domain([parseTime('01.01.1645'), parseTime('17.07.1918')]);
+
 const reignDates = {
-  petri: [1682, 1725],
-  ekaterinai: [1725, 1727],
-  petrii: [1727, 1730],
-  anna: [1730, 1740.5],
-  ivanvi: [1740.5, 1741.5],
-  elizaveta: [1741.5, 1762],
-  petriii: [1762, 1762.5],
-  ekaterinaii: [1762.5, 1796.75],
-  paveli: [1796.75, 1801],
-  alexandri: [1801, 1825],
-  nikolayi: [1825, 1855],
-  alexandrii: [1855, 1881],
-  alexandriii: [1881, 1894],
-  nikolayii: [1894, 1917]
+  petri: ['07.05.1682', '08.02.1725'],
+  ekaterinai: ['08.02.1725', '17.05.1727'],
+  petrii: ['17.05.1727', '30.01.1730'],
+  anna: ['30.01.1730', '28.10.1740'],
+  ivanvi: ['28.10.1740', '06.12.1741'],
+  elizaveta: ['06.12.1741', '05.01.1762'],
+  petriii: ['05.01.1762', '09.06.1762'],
+  ekaterinaii: ['09.06.1762', '17.11.1796'],
+  paveli: ['17.11.1796', '24.03.1801'],
+  alexandri: ['24.03.1801', '01.12.1825'],
+  nikolayi: ['01.12.1825', '02.03.1855'],
+  alexandrii: ['02.03.1855', '13.03.1881'],
+  alexandriii: ['13.03.1881', '01.11.1894'],
+  nikolayii: ['01.11.1894', '15.03.1917']
 };
 
 const bornDates = {
-  petri: 1672,
-  ekaterinai: 1684,
-  petrii: 1715,
-  anna: 1693,
-  ivanvi: 1740,
-  elizaveta: 1709,
-  petriii: 1728,
-  ekaterinaii: 1729,
-  paveli: 1754,
-  alexandri: 1777,
-  nilolayi: 1796,
-  alexandrii: 1818,
-  alexandriii: 1845,
-  nikolayii: 1868
+  petri: '09.06.1672',
+  ekaterinai: '15.04.1684',
+  petrii: '23.10.1715',
+  anna: '07.02.1693',
+  ivanvi: '23.08.1740',
+  elizaveta: '29.12.1709',
+  petriii: '21.02.1728',
+  ekaterinaii: '02.05.1729',
+  paveli: '01.10.1754',
+  alexandri: '23.12.1777',
+  nilolayi: '06.07.1796',
+  alexandrii: '29.04.1818',
+  alexandriii: '11.03.1845',
+  nikolayii: '18.05.1868'
 };
+
+export const chapters = [
+  {
+    label: 'ГЛАВА 1',
+    period: ['01.01.1645', '01.01.1700'],
+    position: 'top',
+    level: 'first'
+  },
+  {
+    label: 'ГЛАВА 2',
+    period: ['01.01.1696', '01.01.1723'],
+    position: 'top',
+    level: 'second'
+  },
+  {
+    label: 'ГЛАВА 3',
+    period: ['01.01.1725', '01.01.1762'],
+    position: 'top',
+    level: 'first'
+  },
+  {
+    label: 'ГЛАВА 4',
+    period: ['01.01.1678', '01.01.1760'],
+    position: 'bottom',
+    level: 'third'
+  },
+  {
+    label: 'ГЛАВА 5',
+    period: ['01.01.1762', '01.01.1800'],
+    position: 'top',
+    level: 'first'
+  },
+  {
+    label: 'ГЛАВА 6',
+    period: ['01.01.1761', '01.01.1796'],
+    position: 'bottom',
+    level: 'third'
+  },
+  {
+    label: 'ГЛАВА 7',
+    period: ['01.01.1800', '01.01.1822'],
+    position: 'top',
+    level: 'second'
+  },
+  {
+    label: 'ГЛАВА 8',
+    period: ['01.01.1823', '01.01.1853'],
+    position: 'top',
+    level: 'second'
+  },
+  {
+    label: 'ГЛАВА 9',
+    period: ['01.01.1797', '01.01.1856'],
+    position: 'bottom',
+    level: 'third'
+  },
+  {
+    label: 'ГЛАВА 10',
+    period: ['01.01.1853', '01.01.1879'],
+    position: 'top',
+    level: 'first'
+  },
+  {
+    label: 'ГЛАВА 11',
+    period: ['01.01.1879', '01.01.1917'],
+    position: 'top',
+    level: 'second'
+  },
+  {
+    label: 'ГЛАВА 12',
+    period: ['01.01.1854', '01.01.1917'],
+    position: 'bottom',
+    level: 'fourth'
+  },
+  {
+    label: 'ГЛАВА 12',
+    period: ['01.01.1914', '01.01.1917'],
+    position: 'right',
+    level: 'third'
+  },
+];
+
+export const names = [
+  {
+    label: 'Пётр I',
+    level: 'first',
+    position: reignDates.petri[0],
+  },
+  {
+    label: 'Екатерина I',
+    level: 'third',
+    position: reignDates.ekaterinai[0],
+    noShift: true,
+    annotationLine: true
+  },
+  {
+    label: 'Пётр II',
+    level: 'second',
+    position: reignDates.petrii[1],
+    noShift: true
+  },
+  {
+    label: 'Анна',
+    level: 'first',
+    position: reignDates.anna[0]
+  },
+  {
+    label: 'Иван VI',
+    level: 'second',
+    position: reignDates.ivanvi[1]
+  },
+  {
+    label: 'Елизавета',
+    level: 'first',
+    position: reignDates.elizaveta[0]
+  },
+  {
+    label: 'Пётр III',
+    level: 'third',
+    position: reignDates.petriii[1],
+    noShift: true
+  },
+  {
+    label: 'Екатерина II',
+    level: 'first',
+    position: reignDates.ekaterinaii[0],
+  },
+  {
+    label: 'Павел I',
+    level: 'second',
+    position: reignDates.paveli[0],
+    annotationLine: true,
+    noShift: true
+  },
+  {
+    label: 'Александр I',
+    level: 'first',
+    position: reignDates.alexandri[0]
+  },
+  {
+    label: 'Николай I',
+    level: 'first',
+    position: reignDates.nikolayi[0]
+  },
+  {
+    label: 'Александр II',
+    level: 'first',
+    position: reignDates.alexandrii[0]
+  },
+  {
+    label: 'Александр III',
+    level: 'first',
+    position: reignDates.alexandriii[0]
+  },
+  {
+    label: 'Николай II',
+    level: 'first',
+    position: reignDates.nikolayii[0]
+  },
+];
 
 const config = [
   {
@@ -124,7 +308,7 @@ const config = [
         level: 'throne',
         points: reignDates.anna,
         radiusLeft: defaultRadius,
-        radiusRight: lastLevelRadius
+        radiusRight: 3
       },
     ]
   },
@@ -135,19 +319,19 @@ const config = [
       {
         level: 'first',
         points: [bornDates.ivanvi, reignDates.anna[1]],
-        radiusLeft: 3,
-        radiusRight: 3,
+        radiusLeft: 1,
+        radiusRight: 1,
         doNotRenderHorizontal: true,
       },
       {
         level: 'throne',
         points: reignDates.ivanvi,
-        radiusLeft: 5,
+        radiusLeft: defaultRadius,
         radiusRight: 5,
       },
       {
         level: 'out',
-        points: [reignDates.ivanvi[1], 1764],
+        points: [reignDates.ivanvi[1], '17.07.1764'],
         radiusRight: lastLevelRadius,
         radiusLeft: defaultRadius,
       }
@@ -159,14 +343,15 @@ const config = [
     levels: [
       {
         level: 'throne',
-        points: [bornDates.elizaveta - 1, bornDates.elizaveta - 1],
+        points: [bornDates.elizaveta, bornDates.elizaveta],
         radiusRight: defaultRadius * 2,
-        doNotRenderHorizontal: true
+        doNotRenderHorizontal: true,
       },
       {
         level: 'fourth',
         points: [bornDates.elizaveta, reignDates.petri[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
     ]
   },
@@ -176,14 +361,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.elizaveta - 1, bornDates.elizaveta - 1],
+        points: [bornDates.elizaveta, bornDates.elizaveta],
         radiusRight: defaultRadius * 3,
-        doNotRenderHorizontal: true
+        doNotRenderHorizontal: true,
       },
       {
         level: 'fourth',
         points: [bornDates.elizaveta, reignDates.petri[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'third',
@@ -206,15 +392,15 @@ const config = [
       {
         level: 'second',
         points: [bornDates.ivanvi, reignDates.anna[1]],
-        radiusLeft: 3,
-        radiusRight: 3,
+        radiusLeft: 1,
+        radiusRight: 1,
         doNotRenderHorizontal: true
       },
       {
         level: 'first',
         points: reignDates.ivanvi,
         radiusLeft: defaultRadius,
-        radiusRight: 5,
+        radiusRight: defaultRadius,
         doNotRenderHorizontal: true
       },
       {
@@ -243,15 +429,15 @@ const config = [
       {
         level: 'third',
         points: [bornDates.ivanvi, reignDates.anna[1]],
-        radiusLeft: 3,
-        radiusRight: 3,
+        radiusLeft: 1,
+        radiusRight: 1,
         doNotRenderHorizontal: true
       },
       {
         level: 'second',
         points: reignDates.ivanvi,
         radiusLeft: defaultRadius,
-        radiusRight: 5,
+        radiusRight: defaultRadius,
         doNotRenderHorizontal: true
       },
       {
@@ -264,14 +450,14 @@ const config = [
         level: 'throne',
         points: reignDates.petriii,
         radiusLeft: 4,
-        radiusRight: 1,
+        radiusRight: 3,
         doNotRenderHorizontal: true
       },
       {
         level: 'outpetriii',
         points: [reignDates.petriii[1], reignDates.petriii[1]],
         radiusLeft: 0,
-        radiusRight: 0,
+        radiusRight: 5,
         doNotRenderHorizontal: true
       }
     ]
@@ -281,22 +467,28 @@ const config = [
     color: '#b2c2ea',
     levels: [
       {
+        level: 'fourth',
+        points: [bornDates.ekaterinaii, reignDates.petrii[1]],
+        radiusRight: defaultRadius,
+      },
+      {
         level: 'third',
-        points: [bornDates.ekaterinaii + 2, reignDates.anna[1]],
-        radiusRight: defaultRadius
+        points: [reignDates.anna[0], bornDates.ivanvi],
+        radiusRight: defaultRadius,
+        radiusLeft: defaultRadius,
       },
       {
         level: 'fourth',
         points: [bornDates.ivanvi, reignDates.anna[1]],
-        radiusLeft: 3,
-        radiusRight: 3,
+        radiusLeft: 1,
+        radiusRight: 1,
         doNotRenderHorizontal: true
       },
       {
         level: 'third',
         points: reignDates.ivanvi,
         radiusLeft: defaultRadius,
-        radiusRight: 5,
+        radiusRight: defaultRadius,
         doNotRenderHorizontal: true
       },
       {
@@ -326,14 +518,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.paveli - 1, bornDates.paveli - 1],
+        points: [bornDates.paveli, bornDates.paveli],
         radiusRight: defaultRadius * 3,
         doNotRenderHorizontal: true
       },
       {
         level: 'third',
         points: [bornDates.paveli, reignDates.elizaveta[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
     ]
   },
@@ -343,14 +536,15 @@ const config = [
     levels: [
       {
         level: 'second',
-        points: [bornDates.paveli - 1, bornDates.paveli - 1],
+        points: [bornDates.paveli, bornDates.paveli],
         radiusRight: defaultRadius * 3,
         doNotRenderHorizontal: true
       },
       {
         level: 'third',
         points: [bornDates.paveli, reignDates.elizaveta[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'second',
@@ -379,14 +573,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.alexandri - 1, bornDates.alexandri - 1],
+        points: [bornDates.alexandri, bornDates.alexandri],
         radiusRight: defaultRadius * 2,
         doNotRenderHorizontal: true
       },
       {
         level: 'second',
         points: [bornDates.alexandri, reignDates.ekaterinaii[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'first',
@@ -408,15 +603,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.nikolayi - 1, bornDates.nikolayi - 1],
+        points: [bornDates.nikolayi, bornDates.nikolayi],
         radiusRight: defaultRadius * 2,
         doNotRenderHorizontal: true
       },
       {
-        level: 'third',
+        level: 'fourth',
         points: [bornDates.nilolayi, reignDates.ekaterinaii[1]],
-        radiusRight: defaultRadius,
-        doNotRenderHorizontal: true
+        radiusRight: 6,
+        isBorn: true
       },
       {
         level: 'second',
@@ -444,14 +639,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.alexandrii - 1, bornDates.alexandrii - 1],
+        points: [bornDates.alexandrii, bornDates.alexandrii],
         radiusRight: defaultRadius * 2,
         doNotRenderHorizontal: true
       },
       {
         level: 'second',
         points: [bornDates.alexandrii, reignDates.alexandri[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'first',
@@ -473,14 +669,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.alexandriii - 1, bornDates.alexandriii - 1],
+        points: [bornDates.alexandriii, bornDates.alexandriii],
         radiusRight: defaultRadius * 2,
         doNotRenderHorizontal: true
       },
       {
         level: 'second',
         points: [bornDates.alexandriii, reignDates.nikolayi[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'first',
@@ -502,14 +699,15 @@ const config = [
     levels: [
       {
         level: 'first',
-        points: [bornDates.nikolayii - 1, bornDates.nikolayii - 1],
+        points: [bornDates.nikolayii, bornDates.nikolayii],
         radiusRight: defaultRadius * 2,
         doNotRenderHorizontal: true
       },
       {
         level: 'second',
         points: [bornDates.nikolayii, reignDates.alexandrii[1]],
-        radiusRight: defaultRadius
+        radiusRight: defaultRadius,
+        isBorn: true
       },
       {
         level: 'first',
@@ -525,7 +723,7 @@ const config = [
       },
       {
         level: 'outnickolayii',
-        points: [1917, 1918],
+        points: [reignDates.nikolayii[1], '17.07.1918'],
         radiusLeft: defaultRadius,
         radiusRight: defaultRadius,
         doNotRenderHorizontal: true

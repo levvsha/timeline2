@@ -3,12 +3,61 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: Montserrat, sans-serif;
   font-wight: 500;
   font-size: 12px;
+  font-family: 'Noto Serif', serif;
 }
 
 path {
-  stroke-width: 4;
+  stroke-width: 5;
+  stroke-linecap: round;
   fill: none;
+  transition: stroke-width .1s linear;
+}
+
+path.hidden-lines {
+  stroke-width: 15;
+  stroke: transparent;
+  fill: none;
+}
+
+.annotation-line {
+  stroke: black;
+  stroke-opacity: 0.25;
+  stroke-width: 1;
+}
+
+.chapter-label {
+  font-size: 17px;
+  letter-spacing: 3px;
+  opacity: .4;
+}
+
+.name-label {
+  font-size: 28px;
+  opacity: 0.8;
+}
+
+.hidden-chapter-line {
+  stroke: transparent
+  stroke-width: 15;
+
+  &:hover + .chapter-line {
+    stroke-width: 5;
+  }
+}
+
+.chapter-line {
+  stroke: black;
+  stroke-opacity: 0.25;
+  stroke-width: 2;
+  transition: stroke-width .1s linear;
+
+  &:hover {
+    stroke-width: 5;
+  }
+}
+
+.hovered-group path:not(.is-born) {
+  stroke-width: 7;
 }
