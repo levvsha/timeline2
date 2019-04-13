@@ -9,7 +9,7 @@ body {
 }
 
 path {
-  stroke-width: 5;
+  stroke-width: 4;
   stroke-linecap: round;
   fill: none;
   transition: stroke-width .1s linear;
@@ -31,19 +31,28 @@ path.hidden-lines {
   font-size: 17px;
   letter-spacing: 3px;
   opacity: .4;
+  transition: opacity .1s linear;
 }
 
 .name-label {
   font-size: 28px;
   opacity: 0.8;
+  transition: opacity .1s linear;
 }
 
 .hidden-chapter-line {
   stroke: transparent
   stroke-width: 15;
+}
 
-  &:hover + .chapter-line {
+.hovered-chapter {
+  .chapter-label {
+    opacity: 0.8
+  }
+
+  .chapter-line {
     stroke-width: 5;
+    stroke-opacity: 0.6;
   }
 }
 
@@ -51,13 +60,26 @@ path.hidden-lines {
   stroke: black;
   stroke-opacity: 0.25;
   stroke-width: 2;
-  transition: stroke-width .1s linear;
+  transition: all .1s linear;
+}
 
-  &:hover {
-    stroke-width: 5;
+.label-container.hovered {
+  .name-label, .name-small-label  {
+    opacity: 1;
+    text-decoration: underline;
   }
 }
 
 .hovered-group path:not(.is-born) {
-  stroke-width: 7;
+  stroke-width: 6;
+}
+
+.hidden-rect {
+  fill: transparent
+}
+
+.name-small-label {
+  font-size: 16px;
+  opacity: 0.4;
+  transition: opacity .1s linear;
 }

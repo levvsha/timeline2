@@ -20,13 +20,16 @@ const connectorsLine = d3.line()
 
 export const levels = {
   outpetriii: 15,
-  outnickolayii: 168,
-  out: 108,
-  throne: 205,
-  first: 222,
-  second: 239,
-  third: 256,
-  fourth: 273,
+  outnickolayii: 148,
+  out: 88,
+  throne: 185,
+  first: 202,
+  second: 219,
+  third: 236,
+  fourth: 253,
+  martaout: 265,
+  petriiout: 290,
+  petriiiout: 310
 };
 
 const getLinesCoords = (chronology) => {
@@ -124,82 +127,83 @@ const getConnectorCoords = (chronology) => {
 const points = chronology.map(tsar => getLinesCoords(tsar));
 const connectors = chronology.map(tsar => getConnectorCoords(tsar));
 
-export default function drawLines(selection, props) {
-  const hiddenLinesRoot = selection
-    .append('g');
+export default class DrawLines {
+  constructor(selection, props) {
+    this.props = props;
 
-  const connectorsRoot = selection
-    .append('g');
+    const hiddenLinesRoot = selection
+      .append('g');
 
-  const linesRoot = selection
-    .append('g');
+    const connectorsRoot = selection
+      .append('g');
 
-  const linesNodes = linesRoot
-    .selectAll('g')
-    .data(points)
-    .enter()
-    .append('g');
+    const linesRoot = selection
+      .append('g');
 
-  const hiddenLinesNodes = hiddenLinesRoot
-    .selectAll('g')
-    .data(points)
-    .enter()
-    .append('g');
+    this.linesNodes = linesRoot
+      .selectAll('g')
+      .data(points)
+      .enter()
+      .append('g');
 
-  const connectorsNodes = connectorsRoot
-    .selectAll('g')
-    .data(connectors)
-    .enter()
-    .append('g');
+    this.hiddenLinesNodes = hiddenLinesRoot
+      .selectAll('g')
+      .data(points)
+      .enter()
+      .append('g');
 
-  const toggleLine = (selection) => {
+    this.connectorsNodes = connectorsRoot
+      .selectAll('g')
+      .data(connectors)
+      .enter()
+      .append('g');
+
+    this.connectorsNodes
+      .selectAll('path')
+      .data(item => item)
+      .enter()
+      .append('path')
+      .attr('d', data => connectorsLine(data))
+      .attr('stroke', item => item[0].color)
+      .classed('is-born', item => item[0].isBorn)
+      .call(this.bindToggleEvents);
+
+    this.hiddenLinesNodes
+      .selectAll('path')
+      .data(item => item)
+      .enter()
+      .append('path')
+      .attr('class', 'hidden-lines')
+      .attr('d', data => line(data))
+      .call(this.bindToggleEvents);
+
+    this.linesNodes
+      .selectAll('path')
+      .data(item => item)
+      .enter()
+      .append('path')
+      .attr('d', data => line(data))
+      .attr('stroke', item => item[0].color)
+      .call(this.bindToggleEvents);
+  }
+
+  bindToggleEvents = (selection) => {
     selection
       .on('mouseenter', (hoveredItem) => {
-        linesNodes
-          .filter(item => item[0][0].key === hoveredItem[0].key)
-          .classed('hovered-group', true);
-
-        connectorsNodes
-          .filter(item => item[0][0].key === hoveredItem[0].key)
-          .classed('hovered-group', true);
+        this.props.toggleLine(hoveredItem[0].key, true);
       })
-      .on('mouseout', (hoveredItem) => {
-        linesNodes
-          .filter(item => item[0][0].key === hoveredItem[0].key)
-          .classed('hovered-group', false);
-
-        connectorsNodes
-          .filter(item => item[0][0].key === hoveredItem[0].key)
-          .classed('hovered-group', false);
+      .on('mouseleave', (hoveredItem) => {
+        this.props.toggleLine(hoveredItem[0].key, false);
       });
-  };
+  }
 
-  connectorsNodes
-    .selectAll('path')
-    .data(item => item)
-    .enter()
-    .append('path')
-    .attr('d', data => connectorsLine(data))
-    .attr('stroke', item => item[0].color)
-    .classed('is-born', item => item[0].isBorn)
-    .call(toggleLine);
+  toggleLine = (key, visibilityStatus) => {
+    this.linesNodes
+      .filter(item => item[0][0].key === key)
+      .classed('hovered-group', visibilityStatus);
 
-  hiddenLinesNodes
-    .selectAll('path')
-    .data(item => item)
-    .enter()
-    .append('path')
-    .attr('class', 'hidden-lines')
-    .attr('d', data => line(data))
-    .call(toggleLine);
-
-  linesNodes
-    .selectAll('path')
-    .data(item => item)
-    .enter()
-    .append('path')
-    .attr('d', data => line(data))
-    .attr('stroke', item => item[0].color)
-    .call(toggleLine);
-
+    this.connectorsNodes
+      .filter(item => item[0][0].key === key)
+      .classed('hovered-group', visibilityStatus);
+  }
 }

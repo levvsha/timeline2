@@ -4,7 +4,7 @@ const defaultRadius = 10;
 const lastLevelRadius = 5;
 
 const margins = {
-  top: 30,
+  top: 15,
   right: 140,
   bottom: 30,
   left: 30
@@ -18,6 +18,14 @@ export const dimensions = {
   height,
   margins
 };
+
+export const getBB = (selection, properyName = 'bbox') => {
+  console.log('selection ==>', selection)
+  selection.each(function(d){
+    console.log('this.getBBox() ==>', this.getBBox())
+    d[properyName] = this.getBBox();
+  })
+}
 
 export const parseTime  = d3.timeParse("%d.%m.%Y");
 
@@ -145,77 +153,146 @@ export const names = [
     label: 'Пётр I',
     level: 'first',
     position: reignDates.petri[0],
+    key: 'petri',
+    smallLabel: ['Пётр Алексеевич'],
+    smallLabelLevel: 'first',
+    smallLabelPosition: bornDates.petri
   },
   {
     label: 'Екатерина I',
     level: 'third',
     position: reignDates.ekaterinai[0],
     noShift: true,
-    annotationLine: true
+    annotationLine: true,
+    key: 'ekaterinai',
+    smallLabel: ['Марта Самуиловна', 'Скавронская'],
+    smallAnnotationLine: true,
+    smallLabelLevel: 'martaout',
+    smallLabelPosition: bornDates.ekaterinai,
+    smallLabelPointTo: 'first'
   },
   {
     label: 'Пётр II',
     level: 'second',
     position: reignDates.petrii[1],
-    noShift: true
+    noShift: true,
+    key: 'petrii',
+    smallLabel: ['Пётр Алексеевич'],
+    smallAnnotationLine: true,
+    smallLabelLevel: 'petriiout',
+    smallLabelPosition: bornDates.petrii,
+    smallLabelPointTo: 'second'
   },
   {
     label: 'Анна',
     level: 'first',
-    position: reignDates.anna[0]
+    position: reignDates.anna[0],
+    key: 'anna',
+    smallLabel: ['Анна Иоановна'],
+    smallLabelLevel: 'third',
+    smallLabelPosition: bornDates.anna
   },
   {
     label: 'Иван VI',
     level: 'second',
-    position: reignDates.ivanvi[1]
+    position: reignDates.ivanvi[1],
+    key: 'ivanvi'
   },
   {
     label: 'Елизавета',
     level: 'first',
-    position: reignDates.elizaveta[0]
+    position: reignDates.elizaveta[0],
+    key: 'elizaveta',
+    smallLabel: ['Елизавета Петровна'],
+    smallLabelLevel: 'fourth',
+    smallLabelPosition: bornDates.elizaveta,
+    smallLabelShift: 15
   },
   {
     label: 'Пётр III',
     level: 'third',
     position: reignDates.petriii[1],
-    noShift: true
+    noShift: true,
+    key: 'petriii',
+    smallLabel: [
+      'Карл Петер',
+      'Ульрих фон Шлейзвиг-',
+      'Гольштейн-Готторп'
+    ],
+    smallAnnotationLine: true,
+    smallLabelLevel: 'petriiiout',
+    smallLabelPosition: bornDates.petriii,
+    smallLabelPointTo: 'third'
   },
   {
     label: 'Екатерина II',
     level: 'first',
     position: reignDates.ekaterinaii[0],
+    key: 'ekaterinaii',
+    smallLabel: [
+      'София',
+      'Фредерика Августа',
+      'Ангальт-Цербская'
+    ],
+    smallLabelLevel: 'third',
+    smallLabelPosition: reignDates.anna[0],
+    smallLabelShift: 10
   },
   {
     label: 'Павел I',
     level: 'second',
     position: reignDates.paveli[0],
     annotationLine: true,
-    noShift: true
+    noShift: true,
+    key: 'paveli',
+    smallLabel: ['Павел', 'Петрович'],
+    smallLabelLevel: 'third',
+    smallLabelPosition: bornDates.paveli
   },
   {
     label: 'Александр I',
     level: 'first',
-    position: reignDates.alexandri[0]
+    position: reignDates.alexandri[0],
+    key: 'alexandri',
+    smallLabel: ['Александр', 'Павлович'],
+    smallLabelLevel: 'second',
+    smallLabelPosition: bornDates.alexandri
   },
   {
     label: 'Николай I',
     level: 'first',
-    position: reignDates.nikolayi[0]
+    position: reignDates.nikolayi[0],
+    key: 'nikolayi',
+    smallLabel: ['Николай', 'Павлович'],
+    smallLabelLevel: 'fourth',
+    smallLabelPosition: bornDates.nilolayi
   },
   {
     label: 'Александр II',
     level: 'first',
-    position: reignDates.alexandrii[0]
+    position: reignDates.alexandrii[0],
+    key: 'alexandrii',
+    smallLabel: ['Александр', 'Николаевич'],
+    smallLabelLevel: 'second',
+    smallLabelPosition: bornDates.alexandrii
   },
   {
     label: 'Александр III',
     level: 'first',
-    position: reignDates.alexandriii[0]
+    position: reignDates.alexandriii[0],
+    key: 'alexandriii',
+    smallLabel: ['Александр', 'Александрович'],
+    smallLabelLevel: 'second',
+    smallLabelPosition: bornDates.alexandriii
   },
   {
     label: 'Николай II',
     level: 'first',
-    position: reignDates.nikolayii[0]
+    position: reignDates.nikolayii[0],
+    key: 'nikolayii',
+    smallLabel: ['Николай', 'Александрович'],
+    smallLabelLevel: 'second',
+    smallLabelPosition: bornDates.nikolayii
   },
 ];
 
