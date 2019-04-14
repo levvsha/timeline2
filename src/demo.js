@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { dimensions } from './config';
+import chronology, { dimensions } from './config';
 import DrawLines from './lines';
 import DrawChapters from './chapters';
 import DrawLabels from './labels';
@@ -21,7 +21,8 @@ export default class Visualization {
       .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')')
       .call((selection) => {
         const props = {
-          toggleLine: this.hoverLabel
+          toggleLine: this.hoverLabel,
+          chronology
         };
 
         this.lines = new DrawLines(selection, props);
@@ -31,7 +32,11 @@ export default class Visualization {
       svg.append('g') // chapters
         .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')')
         .call((selection) => {
-          new DrawChapters(selection)
+          const props = {
+            hoverLinesByChapter: this.hoverLinesByChapter
+          };
+
+          new DrawChapters(selection, props)
         });
 
       svg.append('g') // labels
@@ -43,6 +48,33 @@ export default class Visualization {
 
           this.labels = new DrawLabels(selection, props)
         });
+    });
+  }
+
+  hoverLinesByChapter = (chapterData, status) => {
+    let highlightedKeys = [];
+
+    for (let i = 0; i < chronology.length; i++) {
+      const throneLevel = chronology[i].levels.filter(level => level.level === 'throne');
+
+      if (!throneLevel.length || chronology[i].isBorn) {
+        continue;
+      }
+
+      const throneDates = throneLevel[0].points;
+
+      if (
+        chapterData.period[0] >= throneDates[0] && chapterData.period[0] <= throneDates[1] ||
+        chapterData.period[1] >= throneDates[0] && chapterData.period[1] <= throneDates[1] ||
+        throneDates[0] >= chapterData.period[0] && throneDates[1] <= chapterData.period[1]
+      ) {
+        highlightedKeys.push(chronology[i].key)
+      }
+    }
+
+    highlightedKeys.forEach(key => {
+      this.lines.toggleLine(key, status);
+      this.labels.toggleLabel(key, status);
     });
   }
   

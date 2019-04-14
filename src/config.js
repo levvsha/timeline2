@@ -20,12 +20,10 @@ export const dimensions = {
 };
 
 export const getBB = (selection, properyName = 'bbox') => {
-  console.log('selection ==>', selection)
   selection.each(function(d){
-    console.log('this.getBBox() ==>', this.getBBox())
     d[properyName] = this.getBBox();
-  })
-}
+  });
+};
 
 export const parseTime  = d3.timeParse("%d.%m.%Y");
 
@@ -417,6 +415,7 @@ const config = [
   {
     key: 'elizaveta',
     color: '#afd500',
+    isBorn: true,
     levels: [
       {
         level: 'throne',
@@ -808,5 +807,11 @@ const config = [
     ]
   },
 ];
+
+config.forEach(item => {
+  item.levels.forEach(level => {
+    level.points = level.points.map(date => xScale(parseTime(date)));
+  })
+});
 
 export default config.reverse();

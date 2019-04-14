@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import chronology, { xScale, parseTime } from './config';
+import { xScale, parseTime } from './config';
 
 const line = d3.line()
   .x(function (d) {
@@ -50,13 +50,13 @@ const getLinesCoords = (chronology) => {
     if (!item.doNotRenderHorizontal) {
       coords = [
         {
-          x: xScale(parseTime(item.points[0])) + leftCorrector,
+          x: item.points[0] + leftCorrector,
           y: levels[item.level],
           key: chronology.key,
           color: chronology.color
         },
         {
-          x: xScale(parseTime(item.points[1])) - rightCorrector,
+          x: item.points[1] - rightCorrector,
           y: levels[item.level],
           key: chronology.key,
           color: chronology.color
@@ -90,26 +90,26 @@ const getConnectorCoords = (chronology) => {
 
       coords = coords.concat([
         {
-          x: xScale(parseTime(item.points[0])) - rightCorrector,
+          x: item.points[0] - rightCorrector,
           y: levels[prevItem.level],
           key: chronology.key,
           color: chronology.color,
           isBorn: item.isBorn
         },
         {
-          x: xScale(parseTime(item.points[0])),
+          x: item.points[0],
           y: levels[prevItem.level],
           key: chronology.key,
           color: chronology.color
         },
         {
-          x: xScale(parseTime(item.points[0])),
+          x: item.points[0],
           y: levels[item.level],
           key: chronology.key,
           color: chronology.color
         },
         {
-          x: xScale(parseTime(item.points[0])) + leftCorrector,
+          x: item.points[0] + leftCorrector,
           y: levels[item.level],
           key: chronology.key,
           color: chronology.color
@@ -124,12 +124,12 @@ const getConnectorCoords = (chronology) => {
   return results.filter(item => item.length);
 };
 
-const points = chronology.map(tsar => getLinesCoords(tsar));
-const connectors = chronology.map(tsar => getConnectorCoords(tsar));
-
 export default class DrawLines {
   constructor(selection, props) {
     this.props = props;
+    const { chronology } = props;
+    const points = chronology.map(tsar => getLinesCoords(tsar));
+    const connectors = chronology.map(tsar => getConnectorCoords(tsar));
 
     const hiddenLinesRoot = selection
       .append('g');

@@ -10,6 +10,8 @@ const chaptersLevels = {
 
 export default class DrawChapters {
   constructor(selection, props) {
+    this.props = props;
+
     this.chaptersNode = selection
       .selectAll('g')
       .data(chapters.map(chapter => ({
@@ -77,12 +79,18 @@ export default class DrawChapters {
   }
 
   bindHoverEvent = (selection) => {
+    const self = this;
+
     selection
-      .on('mouseenter', function(item) {
+      .on('mouseenter', function(chapter) {
+        self.props.hoverLinesByChapter(chapter, true);
+
         d3.select(this.parentNode)
             .classed('hovered-chapter', true);
       })
-      .on('mouseleave', function(item) {
+      .on('mouseleave', function(chapter) {
+        self.props.hoverLinesByChapter(chapter, false);
+
         d3.select(this.parentNode)
           .classed('hovered-chapter', false);
       });
